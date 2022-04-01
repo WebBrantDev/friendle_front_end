@@ -11,7 +11,7 @@ const TeamDashboard = () => {
   const [teamId, setTeamId] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [teamData, setTeamData] = useState("");
-  const [gameDay, setGameDay] = useState("");
+  // const [gameDay, setGameDay] = useState("");
 
   let navigate = useNavigate();
 
@@ -37,7 +37,7 @@ const TeamDashboard = () => {
             .post("/pullTeamData", {
               team_id: teamId,
               user_id: userId,
-              game_day: gameDay,
+              // game_day: gameDay,
             })
             .then((res) => {
               let sortedData = res.data.sort(
@@ -100,7 +100,7 @@ const TeamDashboard = () => {
             .post("/pullTeamData", {
               team_id,
               user_id: id,
-              game_day: gameDay,
+              // game_day: gameDay,
             })
             .then((res) => {
               let sortedData = res.data.sort(
