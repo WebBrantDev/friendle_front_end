@@ -39,7 +39,15 @@ const Login = () => {
   const loginCall = (email, password) => {
     if (email && password) {
       axios
-        .post(`${apiURL}/login`, { email, password })
+        .post(
+          `${apiURL}/login`,
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+          },
+          { email, password }
+        )
         .then((res) => {
           const { token } = res.data;
           localStorage.setItem("token", token);
