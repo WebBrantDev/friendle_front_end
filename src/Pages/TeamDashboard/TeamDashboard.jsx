@@ -15,6 +15,7 @@ const TeamDashboard = () => {
 
   const apiURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
   const siteURL = process.env.REACT_APP_SITE_URL || "http://localhost:3000";
+
   let navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -73,15 +74,18 @@ const TeamDashboard = () => {
   };
 
   useEffect(() => {
+    let nav = useNavigate();
     if (!localStorage.getItem("token")) {
-      navigate("/");
+      nav("/");
     }
   }, []);
 
   useEffect(() => {
+    const serverURL =
+      process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
     if (!loggedIn) {
       axios
-        .get(`${apiURL}/teamDashboard`, {
+        .get(`${serverURL}/teamDashboard`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -95,7 +99,7 @@ const TeamDashboard = () => {
           setTeamId(team_id);
           setLoggedIn(true);
           axios
-            .post(`${apiURL}/pullTeamData`, {
+            .post(`${serverURL}/pullTeamData`, {
               team_id,
               user_id: id,
               // game_day: gameDay,
