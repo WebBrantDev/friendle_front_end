@@ -1,21 +1,23 @@
 import "./Signup.scss";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 const Signup = () => {
   let navigate = useNavigate();
   let params = useParams();
 
-  useEffect(() => {
-    let isMounted = true;
-    if (localStorage.getItem("token")) {
-      localStorage.removeItem("token");
-    }
-    return () => {
-      isMounted = false;
-    };
-  });
+  // useEffect(() => {
+  //   // let isMounted = true;
+  //   if (localStorage.getItem("token")) {
+  //     localStorage.removeItem("token");
+  //   }
+  //   // return () => {
+  //   //   isMounted = false;
+  //   // };
+  //   return;
+  // }),
+  //   [];
 
   const signupHandler = (e) => {
     e.preventDefault();
