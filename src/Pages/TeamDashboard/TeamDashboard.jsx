@@ -70,17 +70,17 @@ const TeamDashboard = () => {
     navigate("/Login");
   };
 
-  useEffect(() => {
-    // let isMounted = true;
-    if (!localStorage.getItem("token")) {
-      navigate("/");
-    }
-    return;
-    // return () => {
-    //   isMounted = false;
-    // };
-  }),
-    [];
+  // useEffect(() => {
+  //   // let isMounted = true;
+  //   if (!localStorage.getItem("token")) {
+  //     navigate("/");
+  //   }
+  //   return;
+  //   // return () => {
+  //   //   isMounted = false;
+  //   // };
+  // }),
+  //   [];
 
   useEffect(() => {
     if (!loggedIn) {

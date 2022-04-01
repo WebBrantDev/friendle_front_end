@@ -7,17 +7,17 @@ const Signup = () => {
   let navigate = useNavigate();
   let params = useParams();
 
-  useEffect(() => {
-    // let isMounted = true;
-    if (localStorage.getItem("token")) {
-      localStorage.removeItem("token");
-    }
-    // return () => {
-    //   isMounted = false;
-    // };
-    return;
-  }),
-    [];
+  // useEffect(() => {
+  //   // let isMounted = true;
+  //   if (localStorage.getItem("token")) {
+  //     localStorage.removeItem("token");
+  //   }
+  //   // return () => {
+  //   //   isMounted = false;
+  //   // };
+  //   return;
+  // }),
+  //   [];
 
   const signupHandler = (e) => {
     e.preventDefault();
