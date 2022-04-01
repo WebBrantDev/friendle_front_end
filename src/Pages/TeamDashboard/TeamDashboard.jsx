@@ -74,13 +74,6 @@ const TeamDashboard = () => {
   };
 
   useEffect(() => {
-    let nav = useNavigate();
-    if (!localStorage.getItem("token")) {
-      nav("/");
-    }
-  }, []);
-
-  useEffect(() => {
     const serverURL =
       process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
     if (!loggedIn) {
@@ -119,6 +112,10 @@ const TeamDashboard = () => {
         });
     }
   }, [loggedIn]);
+
+  if (!localStorage.getItem("token")) {
+    navigate("/");
+  }
 
   return (
     <div className="team-dashboard">
