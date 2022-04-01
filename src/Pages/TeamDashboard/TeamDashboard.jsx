@@ -13,6 +13,9 @@ const TeamDashboard = () => {
   const [teamData, setTeamData] = useState("");
   // const [gameDay, setGameDay] = useState("");
 
+  const apiURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
+  const siteURL = process.env.REACT_APP_SITE_URL || "http://localhost:3000";
+
   let navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -31,10 +34,10 @@ const TeamDashboard = () => {
         teamId
       );
       axios
-        .post("/addEntry", formattedData)
+        .post(`${apiURL}/addEntry`, formattedData)
         .then(() => {
           axios
-            .post("/pullTeamData", {
+            .post(`${apiURL}/pullTeamData`, {
               team_id: teamId,
               user_id: userId,
               // game_day: gameDay,
@@ -57,7 +60,7 @@ const TeamDashboard = () => {
 
   const inviteHandler = (e) => {
     e.preventDefault();
-    const url = `http://localhost:3000/Signup/${teamId}`;
+    const url = `${siteURL}/Signup/${teamId}`;
     console.log(url);
     navigator.clipboard.writeText(url);
     alert("Copied link to clipboard!");
@@ -70,22 +73,12 @@ const TeamDashboard = () => {
     navigate("/Login");
   };
 
-  // useEffect(() => {
-  //   // let isMounted = true;
-  //   if (!localStorage.getItem("token")) {
-  //     navigate("/");
-  //   }
-  //   return;
-  //   // return () => {
-  //   //   isMounted = false;
-  //   // };
-  // }),
-  //   [];
-
   useEffect(() => {
+    const serverURL =
+      process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
     if (!loggedIn) {
       axios
-        .get("/teamDashboard", {
+        .get(`${serverURL}/teamDashboard`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -99,7 +92,7 @@ const TeamDashboard = () => {
           setTeamId(team_id);
           setLoggedIn(true);
           axios
-            .post("/pullTeamData", {
+            .post(`${serverURL}/pullTeamData`, {
               team_id,
               user_id: id,
               // game_day: gameDay,
@@ -119,6 +112,10 @@ const TeamDashboard = () => {
         });
     }
   }, [loggedIn]);
+
+  if (!localStorage.getItem("token")) {
+    navigate("/");
+  }
 
   return (
     <div className="team-dashboard">

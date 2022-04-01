@@ -6,7 +6,7 @@ const CreateTeam = () => {
   let navigate = useNavigate();
   let params = useParams();
 
-  console.log(params);
+  const apiURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
 
   const createHandler = (e) => {
     e.preventDefault();
@@ -14,7 +14,7 @@ const CreateTeam = () => {
     const user_id = params.id;
     console.log(team_name, user_id);
     axios
-      .post("/createTeam", { team_name, user_id })
+      .post(`${apiURL}/createTeam`, { team_name, user_id })
       .then((res) => {
         console.log(res.data);
         navigate("/TeamDashboard");
