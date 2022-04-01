@@ -6,13 +6,15 @@ import { useEffect, useState } from "react";
 const Login = () => {
   let navigate = useNavigate();
 
+  const apiURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
+
   let [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
     if (localStorage.getItem("token")) {
       axios
-        .get("/teamDashboard", {
+        .get(`${apiURL}/teamDashboard`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -36,7 +38,7 @@ const Login = () => {
   const loginCall = (email, password) => {
     if (email && password) {
       axios
-        .post("/login", { email, password })
+        .post(`${apiURL}/login`, { email, password })
         .then((res) => {
           const { token } = res.data;
           localStorage.setItem("token", token);
