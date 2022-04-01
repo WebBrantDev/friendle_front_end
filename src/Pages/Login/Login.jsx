@@ -17,6 +17,7 @@ const Login = () => {
         .get(`${apiURL}/teamDashboard`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Access-Control-Allow-Origin": "*",
           },
         })
         .then((res) => {
