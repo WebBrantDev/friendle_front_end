@@ -1,7 +1,7 @@
 import "./Signup.scss";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 const Signup = () => {
   let navigate = useNavigate();
