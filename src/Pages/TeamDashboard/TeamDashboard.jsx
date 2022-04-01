@@ -75,6 +75,7 @@ const TeamDashboard = () => {
     if (!localStorage.getItem("token")) {
       navigate("/");
     }
+    return;
     // return () => {
     //   isMounted = false;
     // };
