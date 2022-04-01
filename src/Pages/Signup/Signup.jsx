@@ -8,14 +8,15 @@ const Signup = () => {
   let params = useParams();
 
   useEffect(() => {
-    let isMounted = true;
+    // let isMounted = true;
     if (localStorage.getItem("token")) {
       localStorage.removeItem("token");
     }
-    return () => {
-      isMounted = false;
-    };
-  });
+    // return () => {
+    //   isMounted = false;
+    // };
+  }),
+    [];
 
   const signupHandler = (e) => {
     e.preventDefault();

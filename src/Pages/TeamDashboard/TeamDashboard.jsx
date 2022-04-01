@@ -71,14 +71,15 @@ const TeamDashboard = () => {
   };
 
   useEffect(() => {
-    let isMounted = true;
+    // let isMounted = true;
     if (!localStorage.getItem("token")) {
       navigate("/");
     }
-    return () => {
-      isMounted = false;
-    };
-  });
+    // return () => {
+    //   isMounted = false;
+    // };
+  }),
+    [];
 
   useEffect(() => {
     if (!loggedIn) {
