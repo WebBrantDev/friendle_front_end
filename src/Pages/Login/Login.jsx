@@ -17,7 +17,6 @@ const Login = () => {
         .get(`${apiURL}/teamDashboard`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Access-Control-Allow-Origin": "*",
           },
         })
         .then((res) => {
@@ -36,18 +35,11 @@ const Login = () => {
     };
   });
 
-  const loginCall = (email, password) => {
-    if (email && password) {
+  const loginCall = (username, password) => {
+    if (username && password) {
+      console.log({ username, password });
       axios
-        .post(
-          `${apiURL}/login`,
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-            },
-          },
-          { email, password }
-        )
+        .post(`${apiURL}/login`, { username, password })
         .then((res) => {
           const { token } = res.data;
           localStorage.setItem("token", token);
@@ -63,10 +55,10 @@ const Login = () => {
 
   const loginHandler = (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
+    const username = e.target.username.value;
     const password = e.target.password.value;
 
-    loginCall(email, password);
+    loginCall(username, password);
   };
 
   if (loggedIn) {
@@ -78,8 +70,8 @@ const Login = () => {
           <input
             className="login__input"
             type="text"
-            name="email"
-            placeholder="Email"
+            name="username"
+            placeholder="Username"
           />
           <input
             className="login__input"
