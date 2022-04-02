@@ -11,7 +11,6 @@ const TeamDashboard = () => {
   const [teamId, setTeamId] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [teamData, setTeamData] = useState("");
-  // const [gameDay, setGameDay] = useState("");
 
   const apiURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
   const siteURL = process.env.REACT_APP_SITE_URL || "http://localhost:3000";
@@ -40,7 +39,6 @@ const TeamDashboard = () => {
             .post(`${apiURL}/pullTeamData`, {
               team_id: teamId,
               user_id: userId,
-              // game_day: gameDay,
             })
             .then((res) => {
               let sortedData = res.data.sort(
@@ -48,8 +46,6 @@ const TeamDashboard = () => {
               );
               setTeamData(sortedData);
               console.log(res.data);
-              // console.log(teamId);
-              // console.log(loggedIn);
             });
         })
         .catch((err) => {
@@ -84,28 +80,25 @@ const TeamDashboard = () => {
           },
         })
         .then((res) => {
-          // console.log("hello");
           const { username, id, team_id } = res.data.decoded;
-          // console.log(id);
           setUsername(username);
           setUserId(id);
           setTeamId(team_id);
           setLoggedIn(true);
-          axios
-            .post(`${serverURL}/pullTeamData`, {
-              team_id,
-              user_id: id,
-              // game_day: gameDay,
-            })
-            .then((res) => {
-              let sortedData = res.data.sort(
-                (a, b) => a.created_at - b.created_at
-              );
-              setTeamData(sortedData);
-              console.log(res.data);
-              // console.log(teamId);
-              // console.log(loggedIn);
-            });
+          if (team_id) {
+            axios
+              .post(`${serverURL}/pullTeamData`, {
+                team_id,
+                user_id: id,
+              })
+              .then((res) => {
+                let sortedData = res.data.sort(
+                  (a, b) => a.created_at - b.created_at
+                );
+                setTeamData(sortedData);
+                console.log(res.data);
+              });
+          }
         })
         .catch((err) => {
           console.log(err);
