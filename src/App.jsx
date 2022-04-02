@@ -8,17 +8,15 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <div>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Signup />} />
-          <Route path="Signup/:id" element={<Signup />} />
-          <Route path="Login" element={<Login />} />
-          <Route path="TeamDashboard" element={<TeamDashboard />} />
-          <Route path="CreateTeam/:id" element={<CreateTeam />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Signup />} />
+        <Route path="Signup/:id" element={<Signup />} />
+        <Route path="Login" element={<Login />} />
+        <Route path="TeamDashboard" element={<TeamDashboard />} />
+        <Route path="CreateTeam/:id" element={<CreateTeam />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

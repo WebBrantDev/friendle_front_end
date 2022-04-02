@@ -1,1 +1,101 @@
 @use "../../styles/partials/global" as *;
+
+body {
+  background-color: $black;
+}
+
+.signup {
+  @include mobile-wrapper;
+  background-color: $charcoal;
+  margin: 20vh 2rem;
+  border-radius: 24px;
+
+  @include tablet-size {
+    @include tablet-wrapper;
+    margin: 20vh 4rem;
+  }
+
+  @include desktop-size {
+    width: toRem(1020);
+    margin: 20vh auto;
+  }
+
+  &__form {
+    @include flex-column;
+    align-items: center;
+    border-radius: 8px;
+  }
+
+  &__heading {
+    @include heading;
+  }
+
+  &__subheading {
+    @include subheading;
+    margin-bottom: 0.5rem;
+  }
+
+  &__input {
+    margin: 0.5rem 0;
+    width: 100%;
+    height: 2.5rem;
+    padding: 0.25rem 1rem;
+    border-radius: 24px;
+    border: none;
+    background-color: $bone;
+
+    &:hover {
+      background-color: $white;
+    }
+
+    &:focus {
+      outline: none;
+      background-color: $white;
+    }
+
+    @include tablet-size {
+      max-width: 80%;
+    }
+
+    @include desktop-size {
+      max-width: 60%;
+    }
+  }
+
+  &__signup-button {
+    color: $bone;
+    margin: 1rem 0;
+    width: 40%;
+    height: 2.5rem;
+    border-radius: 24px;
+    border: none;
+    font-weight: $bold;
+    font-size: 0.85rem;
+    background-color: $charcoal;
+    border: 1px solid $black;
+    transition: 0.3s;
+
+    &:hover {
+      background-color: $black;
+      border: 1px solid $black;
+      color: $bone;
+    }
+
+    @include tablet-size {
+      font-size: 1rem;
+    }
+  }
+
+  &__login-container {
+    margin: 0.5rem 0;
+  }
+
+  &__login-link {
+    color: $lightblue;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
