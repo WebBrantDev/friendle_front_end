@@ -59,6 +59,8 @@ const Signup = () => {
   return (
     <div className="signup">
       <form className="signup__form" onSubmit={signupHandler}>
+        <h1 className="signup__heading">Friendle</h1>
+        <h2 className="signup__subheading">Sign Up</h2>
         <input
           className="signup__input"
           type="text"
@@ -79,9 +81,10 @@ const Signup = () => {
         />
         <button className="signup__signup-button">Signup</button>
       </form>
-      <div className="signup__text-container">
-        <p className="signup__text">Already have an account?</p>
-        <Link to="/Login">Log in</Link>
+      <div className="signup__login-container">
+        <Link className="signup__login-link" to="/Login">
+          Already have an account?
+        </Link>
       </div>
     </div>
   );

@@ -1,0 +1,48 @@
+@use "./colors" as *;
+
+// Responsiveness mixins
+@mixin tablet-size {
+  @media screen and (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop-size {
+  @media screen and (min-width: 1280px) {
+    @content;
+  }
+}
+
+// Font mixins
+@mixin heading {
+  font-size: 3rem;
+  color: $bone;
+
+  @include tablet-size {
+    font-size: 3.5rem;
+  }
+}
+
+@mixin subheading {
+  font-size: 1.5rem;
+  color: $bone;
+
+  @include tablet-size {
+    font-size: 2rem;
+  }
+}
+
+// Sizing mixins
+@mixin mobile-wrapper {
+  padding: 1.5rem;
+}
+
+@mixin tablet-wrapper {
+  padding: 1.5rem 3.5rem;
+}
+
+// General mixins
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
