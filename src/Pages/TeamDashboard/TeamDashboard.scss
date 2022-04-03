@@ -1,1 +1,178 @@
 @use "../../styles/partials/global" as *;
+
+.team-dashboard {
+  margin: 1rem;
+  padding: 2rem;
+  background-color: $darkblack;
+  border: none;
+  border-radius: 24px;
+
+  @include tablet-size {
+    @include tablet-wrapper;
+    margin: 1rem 4rem;
+  }
+
+  @include desktop-size {
+    width: toRem(1020);
+    margin: 1rem auto;
+  }
+
+  &__header {
+    @include flex-column;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+
+    @include tablet-size {
+      flex-direction: row;
+    }
+  }
+
+  &__cta-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+    @include desktop-size {
+      justify-content: flex-end;
+    }
+  }
+
+  &__heading {
+    @include heading;
+    text-align: center;
+    margin-bottom: 1rem;
+    width: 100%;
+
+    @include tablet-size {
+      text-align: left;
+    }
+  }
+
+  &__input {
+    @include text-input ($offwhite, $white, $lightblue);
+    @include tablet-size {
+      margin: 0;
+    }
+  }
+  
+  &__button {
+    @include button ($offwhite, $lightblue, $darkblue);
+    margin-top: 0;
+    width: 100%;
+    @include tablet-size {
+      width: 40%;
+      margin: 0 0 0 1rem;
+    }
+
+    &:hover {
+      width: 40%;
+    }
+  }
+
+  &__secondary-button {
+    @include secondary-button ($offwhite, $lightblack, $darkblack);
+    margin: 0 1rem;
+  }
+
+  &__entry-form {
+    @include tablet-size {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__entries-container {
+    width: 100%;
+    @include flex-column;
+    align-items: center;
+    @include tablet-size {
+      align-items: flex-start;
+    }
+  }
+
+  &__entry-container {
+    font-size: 0.85rem;
+    padding: 1.5rem 3rem;
+    margin: 1rem 0;
+    // border: 2px solid $lightblue;
+    border-radius: 24px;
+    transition: 0.3s;
+    background-color: $lightblack;
+
+    &:hover {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      // border: 2px solid $darkblue;
+    }
+
+    &--right {
+      @include tablet-size {
+        align-self: flex-end;
+      }
+    }
+
+    @include tablet-size {
+      font-size: 1rem;
+    }
+  }
+
+  &__pattern-container {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+
+    @include tablet-size {
+      font-size: 1.5rem;
+    }
+  }
+
+  &__user-data {
+    color: $offwhite;
+  }
+}
+
+
+
+// <div className="team-dashboard">
+//       <div className="team-dashboard__main">{`Welcome ${username}!`}</div>
+//       <button className="team-dashboard__button" onClick={logoutHandler}>
+//         Logout
+//       </button>
+//       {teamId ? (
+//         <button className="team-dashboard__button" onClick={inviteHandler}>
+//           Invite a friend!
+//         </button>
+//       ) : (
+//         <button
+//           className="team-dashboard__button"
+//           onClick={() => {
+//             navigate(`/CreateTeam/${userId}`);
+//           }}
+//         >
+//           Create Team
+//         </button>
+//       )}
+//       <form className="team-dashboard__entry-form" onSubmit={handleSubmit}>
+//         <input type="text" name="wordle" />
+//         <button>Submit</button>
+//       </form>
+//       {teamData ? (
+//         <div className="team-dashboard__entries-container">
+//           {teamData.map((entry) => {
+//             return (
+//               <div key={uuidv4()} className="team-dashboard__entry">
+//                 <p>{entry.game_day}</p>
+//                 <p>{entry.num_of_guesses}/6</p>
+//                 <p>{entry.username}</p>
+//                 {formatFrontEnd(entry.guess_pattern).map((line) => {
+//                   return <div key={uuidv4()}>{line}</div>;
+//                 })}
+//                 <p></p>
+//               </div>
+//             );
+//           })}
+//         </div>
+//       ) : (
+//         ""
+//       )}
+//     </div>

@@ -57,7 +57,7 @@ body {
   }
 
   &__input {
-    @include text-input ($offwhite, $white, $lightorange);
+    @include text-input ($offwhite, $white, $lightblue);
     
   }
 
