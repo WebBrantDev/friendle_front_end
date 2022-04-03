@@ -1,1 +1,78 @@
 @use "../../styles/partials/global" as *;
+
+.login {
+  @include mobile-wrapper;
+  background-color: $darkblack;
+  margin: 20vh 2rem;
+  border-radius: 24px;
+
+  @include tablet-size {
+    @include tablet-wrapper;
+    margin: 20vh 4rem;
+  }
+
+  @include desktop-size {
+    width: toRem(1020);
+    margin: 20vh auto;
+  }
+
+  &__form {
+    @include flex-column;
+    align-items: center;
+    border-radius: 8px;
+  }
+
+  &__heading {
+    @include heading;
+    margin-bottom: 0.5rem;
+  }
+
+  &__input-container {
+    width: 100%;
+
+    @include tablet-size {
+      width: 80%;
+    }
+  
+    @include desktop-size {
+      width: 60%;
+    }
+  }
+
+  &__label {
+    color: $offwhite;
+    font-size: 0.85rem;
+
+    @include tablet-size {
+      font-size: 1rem;
+    }
+  }
+
+  &__input {
+    @include text-input ($offwhite, $white, $lightorange);
+  }
+
+  &__login-button {
+    @include button ($offwhite, $lightblue, $darkblue);
+  }
+}
+
+
+
+// <div className="login">
+//         <form className="login__form" onSubmit={loginHandler}>
+//           <input
+//             className="login__input"
+//             type="text"
+//             name="username"
+//             placeholder="Username"
+//           />
+//           <input
+//             className="login__input"
+//             type="password"
+//             name="password"
+//             placeholder="Password"
+//           />
+//           <button className="login__login-button">Login</button>
+//         </form>
+//       </div>

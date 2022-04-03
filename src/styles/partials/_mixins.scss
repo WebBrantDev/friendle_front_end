@@ -1,4 +1,5 @@
 @use "./colors" as *;
+@use "./variables" as *;
 
 // Responsiveness mixins
 @mixin tablet-size {
@@ -16,7 +17,7 @@
 // Font mixins
 @mixin heading {
   font-size: 3rem;
-  color: $bone;
+  color: $lightblue;
 
   @include tablet-size {
     font-size: 3.5rem;
@@ -25,20 +26,68 @@
 
 @mixin subheading {
   font-size: 1.5rem;
-  color: $bone;
+  color: $lightblue;
 
   @include tablet-size {
     font-size: 2rem;
   }
 }
 
+// Button mixins
+@mixin button ($color, $bgColor, $hoverBG) {
+  color: $color;
+  background-color: $bgColor;
+  border-radius: 24px;
+  border: none;
+  font-weight: $bold;
+  font-size: 0.85rem;
+  transition: 0.3s;
+  margin: 1rem 0;
+  width: 40%;
+  height: 2.5rem;
+
+  &:hover {
+    background-color: $hoverBG;
+    cursor: pointer;
+    width: 43%;
+  }
+
+  @include tablet-size {
+    font-size: 1rem;
+  }
+}
+
+// Text input mixins
+@mixin text-input ($bgColor, $hoverBG, $hoverBorder) {
+  width: 100%;
+  height: 2.5rem;
+  padding: 0.25rem 1rem;
+  border-radius: 24px;
+  border: none;
+  transition: 0.3s;
+  background-color: $bgColor;
+  margin: 0.25rem 0 0.75rem 0;
+  border: 2px solid $darkblack;
+
+  &:hover {
+    background-color: $hoverBG;
+    border: 2px solid $hoverBorder;
+  }
+
+  &:focus {
+    outline: none;
+    background-color: $hoverBG;
+    border: 2px solid $hoverBorder;
+  }
+}
+
 // Sizing mixins
 @mixin mobile-wrapper {
-  padding: 1.5rem;
+  padding: 1.5rem 2rem;
 }
 
 @mixin tablet-wrapper {
-  padding: 1.5rem 3.5rem;
+  padding: 2.5rem 4rem;
 }
 
 // General mixins
