@@ -27,12 +27,15 @@ const CreateTeam = () => {
   return (
     <div className="create-team">
       <form className="create-team__form" onSubmit={createHandler}>
-        <input
-          className="create-team__input"
-          type="text"
-          name="team"
-          placeholder="Team Name"
-        />
+        <h1 className="create-team__heading">Create a team!</h1>
+        <div className="create-team__input-container">
+          <input
+            className="create-team__input"
+            type="text"
+            name="team"
+            placeholder="Team Name"
+          />
+        </div>
         <button className="create-team__button">Create</button>
       </form>
     </div>

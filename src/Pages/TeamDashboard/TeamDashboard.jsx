@@ -20,6 +20,7 @@ const TeamDashboard = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let { value } = e.target.wordle;
+    e.target.wordle.value = "";
     if (value) {
       value = value.split(" ");
       const game_day = value[1];
@@ -111,41 +112,66 @@ const TeamDashboard = () => {
   }
 
   return (
-    <div className="team-dashboard">
-      <div className="team-dashboard__main">{`Welcome ${username}!`}</div>
-      <button className="team-dashboard__button" onClick={logoutHandler}>
-        Logout
-      </button>
-      {teamId ? (
-        <button className="team-dashboard__button" onClick={inviteHandler}>
-          Invite a friend!
-        </button>
-      ) : (
-        <button
-          className="team-dashboard__button"
-          onClick={() => {
-            navigate(`/CreateTeam/${userId}`);
-          }}
-        >
-          Create Team
-        </button>
-      )}
+    <section className="team-dashboard">
+      <div className="team-dashboard__header">
+        <h1 className="team-dashboard__heading">{`Team ${username}!`}</h1>
+        <div className="team-dashboard__cta-container">
+          <button
+            className="team-dashboard__secondary-button"
+            onClick={logoutHandler}
+          >
+            Logout
+          </button>
+          {teamId ? (
+            <button
+              className="team-dashboard__secondary-button"
+              onClick={inviteHandler}
+            >
+              Invite a friend!
+            </button>
+          ) : (
+            <button
+              className="team-dashboard__secondary-button"
+              onClick={() => {
+                navigate(`/CreateTeam/${userId}`);
+              }}
+            >
+              Create Team
+            </button>
+          )}
+        </div>
+      </div>
       <form className="team-dashboard__entry-form" onSubmit={handleSubmit}>
-        <input type="text" name="wordle" />
-        <button>Submit</button>
+        <input
+          className="team-dashboard__input"
+          type="text"
+          name="wordle"
+          placeholder="Put your Wordle data here"
+        />
+        <button className="team-dashboard__button">Submit</button>
       </form>
       {teamData ? (
         <div className="team-dashboard__entries-container">
           {teamData.map((entry) => {
             return (
-              <div key={uuidv4()} className="team-dashboard__entry">
-                <p>{entry.game_day}</p>
-                <p>{entry.num_of_guesses}/6</p>
-                <p>{entry.username}</p>
-                {formatFrontEnd(entry.guess_pattern).map((line) => {
-                  return <div key={uuidv4()}>{line}</div>;
-                })}
-                <p></p>
+              <div
+                key={uuidv4()}
+                className={
+                  entry.username === username
+                    ? "team-dashboard__entry-container team-dashboard__entry-container--right"
+                    : "team-dashboard__entry-container"
+                }
+              >
+                <p className="team-dashboard__user-data">{entry.game_day}</p>
+                <p className="team-dashboard__user-data">
+                  {entry.num_of_guesses}/6
+                </p>
+                <p className="team-dashboard__user-data">{entry.username}</p>
+                <div className="team-dashboard__pattern-container">
+                  {formatFrontEnd(entry.guess_pattern).map((line) => {
+                    return <div key={uuidv4()}>{line}</div>;
+                  })}
+                </div>
               </div>
             );
           })}
@@ -153,7 +179,7 @@ const TeamDashboard = () => {
       ) : (
         ""
       )}
-    </div>
+    </section>
   );
 };
 

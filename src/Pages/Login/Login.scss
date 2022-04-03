@@ -49,30 +49,10 @@
   }
 
   &__input {
-    @include text-input ($offwhite, $white, $lightorange);
+    @include text-input ($offwhite, $white, $lightblue);
   }
 
   &__login-button {
     @include button ($offwhite, $lightblue, $darkblue);
   }
 }
-
-
-
-// <div className="login">
-//         <form className="login__form" onSubmit={loginHandler}>
-//           <input
-//             className="login__input"
-//             type="text"
-//             name="username"
-//             placeholder="Username"
-//           />
-//           <input
-//             className="login__input"
-//             type="password"
-//             name="password"
-//             placeholder="Password"
-//           />
-//           <button className="login__login-button">Login</button>
-//         </form>
-//       </div>
