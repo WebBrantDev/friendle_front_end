@@ -67,18 +67,29 @@ const Login = () => {
     return (
       <div className="login">
         <form className="login__form" onSubmit={loginHandler}>
-          <input
-            className="login__input"
-            type="text"
-            name="username"
-            placeholder="Username"
-          />
-          <input
-            className="login__input"
-            type="password"
-            name="password"
-            placeholder="Password"
-          />
+          <h1 className="login__heading">Login</h1>
+          <div className="login__input-container">
+            <label className="login__label" htmlFor="username">
+              Username
+              <input
+                className="login__input"
+                id="username"
+                type="text"
+                name="username"
+                placeholder="CoolGuy77"
+              />
+            </label>
+            <label className="login__label" htmlFor="password">
+              Password
+              <input
+                className="login__input"
+                id="password"
+                type="password"
+                name="password"
+                placeholder="517hkE$FGH!!dfg45"
+              />
+            </label>
+          </div>
           <button className="login__login-button">Login</button>
         </form>
       </div>

@@ -35,8 +35,30 @@ body {
     margin-bottom: 0.5rem;
   }
 
+  &__input-container {
+    width: 100%;
+
+    @include tablet-size {
+      width: 80%;
+    }
+  
+    @include desktop-size {
+      width: 60%;
+    }
+  }
+
+  &__label {
+    color: $offwhite;
+    font-size: 0.85rem;
+
+    @include tablet-size {
+      font-size: 1rem;
+    }
+  }
+
   &__input {
-    @include text-input ($offwhite, $white, $lightorange)
+    @include text-input ($offwhite, $white, $lightorange);
+    
   }
 
   &__signup-button {

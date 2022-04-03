@@ -57,28 +57,42 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup">
+    <section className="signup">
       <form className="signup__form" onSubmit={signupHandler}>
         <h1 className="signup__heading">Friendle</h1>
         <h2 className="signup__subheading">Sign Up</h2>
-        <input
-          className="signup__input"
-          type="text"
-          name="username"
-          placeholder="Username"
-        />
-        <input
-          className="signup__input"
-          type="text"
-          name="email"
-          placeholder="Email"
-        />
-        <input
-          className="signup__input"
-          type="password"
-          name="password"
-          placeholder="Password"
-        />
+        <div className="signup__input-container">
+          <label htmlFor="username" className="signup__label">
+            Username
+            <input
+              className="signup__input"
+              id="username"
+              type="text"
+              name="username"
+              placeholder="WordleKing23"
+            />
+          </label>
+          <label htmlFor="email" className="signup__label">
+            Email
+            <input
+              className="signup__input"
+              id="email"
+              type="text"
+              name="email"
+              placeholder="example@example.com"
+            />
+          </label>
+          <label htmlFor="password" className="signup__label">
+            Password
+            <input
+              className="signup__input"
+              id="password"
+              type="password"
+              name="password"
+              placeholder="DF45$sbbt35hq?11"
+            />
+          </label>
+        </div>
         <button className="signup__signup-button">Signup</button>
       </form>
       <div className="signup__login-container">
@@ -86,7 +100,7 @@ const Signup = () => {
           Already have an account?
         </Link>
       </div>
-    </div>
+    </section>
   );
 };
 
