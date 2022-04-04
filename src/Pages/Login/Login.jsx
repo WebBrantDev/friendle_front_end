@@ -2,6 +2,7 @@ import "./Login.scss";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+// import toast from "react-hot-toast";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -43,12 +44,12 @@ const Login = () => {
         .then((res) => {
           const { token } = res.data;
           localStorage.setItem("token", token);
-        })
-        .then(() => {
           navigate("/TeamDashboard");
+          return res;
         })
         .catch((err) => {
           console.log(err);
+          return err;
         });
     }
   };
@@ -57,7 +58,6 @@ const Login = () => {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
-
     loginCall(username, password);
   };
 
