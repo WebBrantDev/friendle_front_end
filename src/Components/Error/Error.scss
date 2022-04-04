@@ -1,0 +1,22 @@
+@use "../../styles/partials/global" as *;
+
+.error {
+  display: flex;
+  margin-bottom: 0.75rem;
+
+  &__icon {
+    height: 20px;
+    width: 20px;
+    align-items: center;
+    margin-right: 0.5rem;
+  }
+
+  &__text {
+    color: $red;
+    font-size: 0.85rem;
+
+    @include tablet-size {
+      font-size: 1rem;
+    }
+  }
+}

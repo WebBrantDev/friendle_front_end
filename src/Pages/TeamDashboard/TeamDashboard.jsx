@@ -4,6 +4,7 @@ import "./TeamDashboard.scss";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { formatBackEnd, formatFrontEnd } from "../../helpers/formatEntry";
+import toast from "react-hot-toast";
 
 const TeamDashboard = () => {
   const [username, setUsername] = useState("");
@@ -60,13 +61,27 @@ const TeamDashboard = () => {
     const url = `${siteURL}/Signup/${teamId}`;
     console.log(url);
     navigator.clipboard.writeText(url);
-    alert("Copied link to clipboard!");
+    toast("Copied to clipboard!", {
+      icon: "👏",
+      style: {
+        borderRadius: "24px",
+        background: "#FFFFEB",
+        color: "#423E3B",
+      },
+    });
   };
 
   const logoutHandler = (e) => {
     e.preventDefault();
     setLoggedIn(false);
     localStorage.removeItem("token");
+    toast.success("Logged out", {
+      style: {
+        borderRadius: "24px",
+        background: "#FFFFEB",
+        color: "#423E3B",
+      },
+    });
     navigate("/Login");
   };
 
