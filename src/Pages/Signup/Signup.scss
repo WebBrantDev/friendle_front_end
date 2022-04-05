@@ -1,7 +1,10 @@
 @use "../../styles/partials/global" as *;
 
 body {
-  background-color: $lightblack;
+  background-color: $darkblack;
+  @include tablet-size {
+    background-color: $lightblack;
+  }
 }
 
 .signup {

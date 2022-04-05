@@ -22,8 +22,7 @@ const CreateTeam = () => {
           },
         }
       )
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         navigate(`/TeamDashboard`);
       })
       .catch((err) => {

@@ -51,20 +51,24 @@ const Signup = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
     const team_id = params.id || null;
+    setIsSubmitted(true);
+    console.log("HELLO????");
 
     if (username && email && password) {
       if (passwordCheck(password)) {
         setPasswordValid(true);
+        console.log("FIRST");
       }
 
       axios
         .post(`${apiURL}/testUsername`, { username })
         .then((res) => {
-          console.log(res.data);
           if (res.data.isUsed) {
             setUsernameAvailable(false);
+            console.log("FALSEEEEEEEE");
           } else {
             setUsernameAvailable(true);
+            console.log("TRUEEEEE", usernameAvailable);
           }
         })
         .then(() => {
@@ -72,11 +76,12 @@ const Signup = () => {
             .get(`https://www.disify.com/api/email/${email}`)
             .then((res) => {
               const { format, disposable, dns } = res.data;
+              console.log("EMAIL CALL");
               if (format && !disposable && dns) {
-                console.log(usernameAvailable);
                 setEmailValid(true);
-                setIsSubmitted(true);
-                if (passwordValid) {
+                console.log("CHECKS", passwordValid, usernameAvailable);
+                if (passwordValid && usernameAvailable) {
+                  console.log("FINAL CHECK");
                   axios
                     .post(`${apiURL}/signup`, {
                       username,
@@ -85,6 +90,7 @@ const Signup = () => {
                       team_id,
                     })
                     .then(() => {
+                      console.log("HEllow");
                       navigate("/Login");
                     })
                     .catch((err) => {
