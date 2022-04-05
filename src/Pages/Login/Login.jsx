@@ -38,7 +38,6 @@ const Login = () => {
 
   const loginCall = (username, password) => {
     if (username && password) {
-      console.log({ username, password });
       axios
         .post(`${apiURL}/login`, { username, password })
         .then((res) => {
