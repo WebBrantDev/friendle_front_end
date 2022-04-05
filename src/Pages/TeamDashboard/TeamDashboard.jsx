@@ -52,10 +52,11 @@ const TeamDashboard = () => {
             .post(`${apiURL}/pullTeamData`, {
               team_id: teamId,
               user_id: userId,
+              current_game_day: currentGameDay,
             })
             .then((res) => {
               let sortedData = res.data.sort(
-                (a, b) => a.created_at - b.created_at
+                (a, b) => b.created_at - a.created_at
               );
               setTeamData(sortedData);
               toast("Entry added!", {
@@ -116,6 +117,7 @@ const TeamDashboard = () => {
     const serverURL =
       process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
     if (!loggedIn) {
+      console.log("running");
       axios
         .get(`${serverURL}/teamDashboard`, {
           headers: {
@@ -123,6 +125,7 @@ const TeamDashboard = () => {
           },
         })
         .then((res) => {
+          console.log("running");
           const {
             username,
             id,
@@ -157,7 +160,7 @@ const TeamDashboard = () => {
               )
               .then((res) => {
                 let sortedData = res.data.sort(
-                  (a, b) => a.created_at - b.created_at
+                  (a, b) => b.created_at - a.created_at
                 );
                 setTeamData(sortedData);
               });
