@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { formatBackEnd, formatFrontEnd } from "../../helpers/formatEntry";
 import toast from "react-hot-toast";
+import Sidebar from "../../Components/Sidebar/Sidebar";
 import logoutIcon from "../../assets/icons/logout-icon.png";
 import inviteIcon from "../../assets/icons/invite-icon.png";
 import createIcon from "../../assets/icons/create-team-icon.png";
@@ -28,7 +29,7 @@ const TeamDashboard = () => {
     navigate("/");
   }
 
-  const handleSubmit = (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
     let { value } = e.target.wordle;
     e.target.wordle.value = "";
@@ -51,15 +52,13 @@ const TeamDashboard = () => {
             .post(`${apiURL}/pullTeamData`, {
               team_id: teamId,
               user_id: userId,
+              current_game_day: currentGameDay,
             })
             .then((res) => {
-              let sortedData = res.data.entries.sort(
-                (a, b) => a.created_at - b.created_at
+              let sortedData = res.data.sort(
+                (a, b) => b.created_at - a.created_at
               );
-              console.log(res.data);
               setTeamData(sortedData);
-              setCurrentGameDay(res.data.current_game_day);
-              setDailyWord(res.data.daily_word);
               toast("Entry added!", {
                 icon: "👍",
                 style: {
@@ -118,6 +117,7 @@ const TeamDashboard = () => {
     const serverURL =
       process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
     if (!loggedIn) {
+      console.log("running");
       axios
         .get(`${serverURL}/teamDashboard`, {
           headers: {
@@ -125,13 +125,23 @@ const TeamDashboard = () => {
           },
         })
         .then((res) => {
-          const { username, id, team_id, team_name } = res.data;
+          console.log("running");
+          const {
+            username,
+            id,
+            team_id,
+            team_name,
+            daily_word,
+            current_game_day,
+          } = res.data;
           if (team_name) {
             setTeamName(team_name);
+            setTeamId(team_id);
+            setCurrentGameDay(current_game_day);
+            setDailyWord(daily_word);
           }
           setUsername(username);
           setUserId(id);
-          setTeamId(team_id);
           setLoggedIn(true);
           if (team_id) {
             axios
@@ -140,6 +150,7 @@ const TeamDashboard = () => {
                 {
                   team_id,
                   user_id: id,
+                  current_game_day,
                 },
                 {
                   headers: {
@@ -148,13 +159,10 @@ const TeamDashboard = () => {
                 }
               )
               .then((res) => {
-                let sortedData = res.data.entries.sort(
-                  (a, b) => a.created_at - b.created_at
+                let sortedData = res.data.sort(
+                  (a, b) => b.created_at - a.created_at
                 );
                 setTeamData(sortedData);
-                setTeamName(res.data.team_name);
-                setCurrentGameDay(res.data.current_game_day);
-                setDailyWord(res.data.daily_word);
               });
           }
         })
@@ -166,99 +174,124 @@ const TeamDashboard = () => {
   }, [loggedIn]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <section className="team-dashboard">
-      <div className="team-dashboard__header">
-        <div className="team-dashboard__team-info-container">
-          <h1 className="team-dashboard__heading">
-            {teamName ? `${teamName}` : `${username}`}
-          </h1>
-          <div className="team-dashboard__cta-container">
-            {teamId ? (
+    <section className="team-dashboard" id="outer-container">
+      <Sidebar
+        inviteHandler={inviteHandler}
+        logoutHandler={logoutHandler}
+        userId={userId}
+        teamId={teamId}
+        logoutIcon={logoutIcon}
+        createIcon={createIcon}
+        inviteIcon={inviteIcon}
+        pageWrapId={"page-wrap"}
+        outerContainerId={"outer-container"}
+      />
+      <div className="team-dashboard__wrapper" id="page-wrap">
+        <div className="team-dashboard__header">
+          <div className="team-dashboard__team-info-container">
+            <h1 className="team-dashboard__heading">
+              {teamName ? `${teamName}` : `${username}`}
+            </h1>
+            <div className="team-dashboard__cta-container">
+              {teamId ? (
+                <button
+                  className="team-dashboard__secondary-button"
+                  onClick={inviteHandler}
+                >
+                  <img
+                    className="team-dashboard__icon"
+                    src={inviteIcon}
+                    alt="invite a friend icon"
+                  />
+                  Invite a friend!
+                </button>
+              ) : (
+                <button
+                  className="team-dashboard__secondary-button"
+                  onClick={() => {
+                    navigate(`/CreateTeam/${userId}`);
+                  }}
+                >
+                  <img
+                    className="team-dashboard__icon"
+                    src={createIcon}
+                    alt="create a team icon"
+                  />
+                  Create Team
+                </button>
+              )}
               <button
                 className="team-dashboard__secondary-button"
-                onClick={inviteHandler}
+                onClick={logoutHandler}
               >
                 <img
                   className="team-dashboard__icon"
-                  src={inviteIcon}
-                  alt="invite a friend icon"
+                  src={logoutIcon}
+                  alt="logout icon"
                 />
-                Invite a friend!
+                Logout
               </button>
-            ) : (
-              <button
-                className="team-dashboard__secondary-button"
-                onClick={() => {
-                  navigate(`/CreateTeam/${userId}`);
-                }}
-              >
-                <img
-                  className="team-dashboard__icon"
-                  src={createIcon}
-                  alt="create a team icon"
-                />
-                Create Team
-              </button>
-            )}
-            <button
-              className="team-dashboard__secondary-button"
-              onClick={logoutHandler}
-            >
-              <img
-                className="team-dashboard__icon"
-                src={logoutIcon}
-                alt="logout icon"
-              />
-              Logout
-            </button>
+            </div>
+          </div>
+          <div className="team-dashboard__user-info-container">
+            <p className="team-dashboard__user-info">User: {username}</p>
+            <p className="team-dashboard__user-info">Daily word: {dailyWord}</p>
+            <p className="team-dashboard__user-info">
+              Current game day: {currentGameDay}
+            </p>
           </div>
         </div>
-        <div className="team-dashboard__user-info-container">
-          <p className="team-dashboard__user-info">User: {username}</p>
-          <p className="team-dashboard__user-info">Daily word: {dailyWord}</p>
-          <p className="team-dashboard__user-info">
-            Current game day: {currentGameDay}
-          </p>
-        </div>
-      </div>
-      <form className="team-dashboard__entry-form" onSubmit={handleSubmit}>
-        <input
-          className="team-dashboard__input"
-          type="text"
-          name="wordle"
-          placeholder="Put your Wordle data here"
-        />
-        <button className="team-dashboard__button">Submit</button>
-      </form>
-      {teamData ? (
-        <div className="team-dashboard__entries-container">
-          {teamData.map((entry) => {
-            return (
-              <div
-                key={uuidv4()}
-                className={
-                  entry.username === username
-                    ? "team-dashboard__entry-container team-dashboard__entry-container--right"
-                    : "team-dashboard__entry-container"
-                }
-              >
-                <p className="team-dashboard__user-data">{entry.game_day}</p>
-                <p className="team-dashboard__user-data">
-                  {entry.num_of_guesses}/6
-                </p>
-                <p className="team-dashboard__user-data">{entry.username}</p>
-                <div className="team-dashboard__pattern-container">
-                  {formatFrontEnd(entry.guess_pattern).map((line) => {
-                    return <div key={uuidv4()}>{line}</div>;
-                  })}
+        <form className="team-dashboard__entry-form" onSubmit={submitHandler}>
+          <input
+            className="team-dashboard__input"
+            type="text"
+            name="wordle"
+            placeholder="Put your Wordle data here"
+          />
+          <button className="team-dashboard__button">Submit</button>
+        </form>
+        {teamData ? (
+          <div className="team-dashboard__entries-container">
+            {teamData.map((entry) => {
+              return (
+                <div
+                  key={uuidv4()}
+                  className={
+                    entry.username === username
+                      ? "team-dashboard__entry-container team-dashboard__entry-container--right"
+                      : "team-dashboard__entry-container"
+                  }
+                >
+                  <div
+                    className={
+                      entry.username === username
+                        ? "team-dashboard__user-data-container team-dashboard__user-data-container--right"
+                        : "team-dashboard__user-data-container"
+                    }
+                  >
+                    <p className="team-dashboard__user-data">
+                      {entry.game_day}
+                    </p>
+                    <p className="team-dashboard__user-data">
+                      {entry.num_of_guesses}/6
+                    </p>
+                    <p className="team-dashboard__user-data">
+                      {entry.username}
+                    </p>
+                  </div>
+                  <div className="team-dashboard__pattern-container">
+                    {formatFrontEnd(entry.guess_pattern).map((line) => {
+                      return <div key={uuidv4()}>{line}</div>;
+                    })}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        ""
-      )}
+              );
+            })}
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
     </section>
   );
 };
