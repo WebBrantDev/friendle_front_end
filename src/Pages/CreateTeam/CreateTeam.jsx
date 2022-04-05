@@ -12,12 +12,19 @@ const CreateTeam = () => {
     e.preventDefault();
     const team_name = e.target.team.value;
     const user_id = params.id;
-    console.log(team_name, user_id);
     axios
-      .post(`${apiURL}/createTeam`, { team_name, user_id })
+      .post(
+        `${apiURL}/createTeam`,
+        { team_name, user_id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
-        navigate("/TeamDashboard");
+        navigate(`/TeamDashboard`);
       })
       .catch((err) => {
         console.log(err);

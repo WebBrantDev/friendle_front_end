@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { formatBackEnd, formatFrontEnd } from "../../helpers/formatEntry";
 import toast from "react-hot-toast";
+import logoutIcon from "../../assets/icons/logout-icon.png";
+import inviteIcon from "../../assets/icons/invite-icon.png";
+import createIcon from "../../assets/icons/create-team-icon.png";
 
 const TeamDashboard = () => {
   const [username, setUsername] = useState("");
@@ -12,17 +15,24 @@ const TeamDashboard = () => {
   const [teamId, setTeamId] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [teamData, setTeamData] = useState("");
+  const [teamName, setTeamName] = useState("");
+  const [currentGameDay, setCurrentGameDay] = useState("");
+  const [dailyWord, setDailyWord] = useState("");
 
   const apiURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
   const siteURL = process.env.REACT_APP_SITE_URL || "http://localhost:3000";
 
   let navigate = useNavigate();
 
+  if (!localStorage.getItem("token")) {
+    navigate("/");
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let { value } = e.target.wordle;
     e.target.wordle.value = "";
-    if (value) {
+    if (value && value.includes("Wordle")) {
       value = value.split(" ");
       const game_day = value[1];
       const num_of_guesses = value[2][0];
@@ -43,16 +53,35 @@ const TeamDashboard = () => {
               user_id: userId,
             })
             .then((res) => {
-              let sortedData = res.data.sort(
+              let sortedData = res.data.entries.sort(
                 (a, b) => a.created_at - b.created_at
               );
-              setTeamData(sortedData);
               console.log(res.data);
+              setTeamData(sortedData);
+              setCurrentGameDay(res.data.current_game_day);
+              setDailyWord(res.data.daily_word);
+              toast("Entry added!", {
+                icon: "👍",
+                style: {
+                  borderRadius: "24px",
+                  background: "#FFFFEB",
+                  color: "#423E3B",
+                },
+              });
             });
         })
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      toast.error("Please input some wordle data", {
+        style: {
+          borderRadius: "24px",
+          background: "#FFFFEB",
+          color: "#423E3B",
+        },
+      });
+      return;
     }
   };
 
@@ -96,64 +125,100 @@ const TeamDashboard = () => {
           },
         })
         .then((res) => {
-          const { username, id, team_id } = res.data.decoded;
+          const { username, id, team_id, team_name } = res.data;
+          if (team_name) {
+            setTeamName(team_name);
+          }
           setUsername(username);
           setUserId(id);
           setTeamId(team_id);
           setLoggedIn(true);
           if (team_id) {
             axios
-              .post(`${serverURL}/pullTeamData`, {
-                team_id,
-                user_id: id,
-              })
+              .post(
+                `${serverURL}/pullTeamData`,
+                {
+                  team_id,
+                  user_id: id,
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                }
+              )
               .then((res) => {
-                let sortedData = res.data.sort(
+                let sortedData = res.data.entries.sort(
                   (a, b) => a.created_at - b.created_at
                 );
                 setTeamData(sortedData);
-                console.log(res.data);
+                setTeamName(res.data.team_name);
+                setCurrentGameDay(res.data.current_game_day);
+                setDailyWord(res.data.daily_word);
               });
           }
         })
         .catch((err) => {
           console.log(err);
+          navigate("/Login");
         });
     }
-  }, [loggedIn]);
-
-  if (!localStorage.getItem("token")) {
-    navigate("/");
-  }
+  }, [loggedIn]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <section className="team-dashboard">
       <div className="team-dashboard__header">
-        <h1 className="team-dashboard__heading">{`Team ${username}!`}</h1>
-        <div className="team-dashboard__cta-container">
-          <button
-            className="team-dashboard__secondary-button"
-            onClick={logoutHandler}
-          >
-            Logout
-          </button>
-          {teamId ? (
+        <div className="team-dashboard__team-info-container">
+          <h1 className="team-dashboard__heading">
+            {teamName ? `${teamName}` : `${username}`}
+          </h1>
+          <div className="team-dashboard__cta-container">
+            {teamId ? (
+              <button
+                className="team-dashboard__secondary-button"
+                onClick={inviteHandler}
+              >
+                <img
+                  className="team-dashboard__icon"
+                  src={inviteIcon}
+                  alt="invite a friend icon"
+                />
+                Invite a friend!
+              </button>
+            ) : (
+              <button
+                className="team-dashboard__secondary-button"
+                onClick={() => {
+                  navigate(`/CreateTeam/${userId}`);
+                }}
+              >
+                <img
+                  className="team-dashboard__icon"
+                  src={createIcon}
+                  alt="create a team icon"
+                />
+                Create Team
+              </button>
+            )}
             <button
               className="team-dashboard__secondary-button"
-              onClick={inviteHandler}
+              onClick={logoutHandler}
             >
-              Invite a friend!
+              <img
+                className="team-dashboard__icon"
+                src={logoutIcon}
+                alt="logout icon"
+              />
+              Logout
             </button>
-          ) : (
-            <button
-              className="team-dashboard__secondary-button"
-              onClick={() => {
-                navigate(`/CreateTeam/${userId}`);
-              }}
-            >
-              Create Team
-            </button>
-          )}
+          </div>
+        </div>
+        <div className="team-dashboard__user-info-container">
+          <p className="team-dashboard__user-info">User: {username}</p>
+          <p className="team-dashboard__user-info">Daily word: {dailyWord}</p>
+          <p className="team-dashboard__user-info">
+            Current game day: {currentGameDay}
+          </p>
         </div>
       </div>
       <form className="team-dashboard__entry-form" onSubmit={handleSubmit}>

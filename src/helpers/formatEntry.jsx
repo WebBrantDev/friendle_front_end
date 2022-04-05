@@ -48,6 +48,5 @@ export const formatFrontEnd = (data) => {
       str = "";
     }
   }
-  console.log(formattedArray);
   return formattedArray;
 };
