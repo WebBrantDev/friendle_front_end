@@ -163,7 +163,7 @@ const TeamDashboard = () => {
           navigate("/Login");
         });
     }
-  }, [loggedIn]);
+  }, [loggedIn]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <section className="team-dashboard">
