@@ -85,6 +85,7 @@ const Signup = () => {
               password,
               team_id,
             });
+            navigate("/Login");
 
             return signupRes;
           } else {
