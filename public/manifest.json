@@ -1,9 +1,23 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "short_name": "Friendle",
+  "name": "Friendle: Challenge your friends!",
+  "description": "Inspired by the hit daily word game, Wordle, Friendle is a mobile-first platform for you and your friends to take on the daily challenge together. Friendle leaves picking a starting word each day to the robots and lets players test their mental strength against their friends.",
+  "lang": "en-US",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "friendle-main-logo.png",
+      "type": "image/png",
+      "sizes": "330x150"
+    }
+  ],
+  "start_url": "/",
+  "display": "browser",
+  "theme_color": "#5E52CB",
+  "background_color": "##2B2826"
 }
