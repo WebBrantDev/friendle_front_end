@@ -1,8 +1,8 @@
 import "./Login.scss";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-// import toast from "react-hot-toast";
+import logo from "../../assets/logos/friendle-main-logo.png";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -20,7 +20,7 @@ const Login = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         })
-        .then((res) => {
+        .then(() => {
           if (isMounted) {
             setLoggedIn(true);
             navigate("/TeamDashboard");
@@ -66,6 +66,7 @@ const Login = () => {
     return (
       <div className="login">
         <form className="login__form" onSubmit={loginHandler}>
+          <img className="signup__logo" src={logo} alt="Friendle logo" />
           <h1 className="login__heading">Login</h1>
           <div className="login__input-container">
             <label className="login__label" htmlFor="username">
@@ -91,6 +92,11 @@ const Login = () => {
           </div>
           <button className="login__login-button">Login</button>
         </form>
+        <div className="login__login-link-container">
+          <Link className="login__login-link" to="/">
+            Need an account?
+          </Link>
+        </div>
       </div>
     );
   }

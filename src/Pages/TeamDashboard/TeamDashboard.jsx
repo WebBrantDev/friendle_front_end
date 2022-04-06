@@ -34,6 +34,16 @@ const TeamDashboard = () => {
     let { value } = e.target.wordle;
     e.target.wordle.value = "";
     if (value && value.includes("Wordle")) {
+      if (!teamId) {
+        toast.error("Please create a team first!", {
+          style: {
+            borderRadius: "24px",
+            background: "#FFFFEB",
+            color: "#423E3B",
+          },
+        });
+        return;
+      }
       value = value.split(" ");
       const game_day = value[1];
       const num_of_guesses = value[2][0];
@@ -73,7 +83,7 @@ const TeamDashboard = () => {
           console.log(err);
         });
     } else {
-      toast.error("Please input some wordle data", {
+      toast.error("Please input some wordle data!", {
         style: {
           borderRadius: "24px",
           background: "#FFFFEB",
@@ -233,13 +243,21 @@ const TeamDashboard = () => {
               </button>
             </div>
           </div>
-          <div className="team-dashboard__user-info-container">
-            <p className="team-dashboard__user-info">User: {username}</p>
-            <p className="team-dashboard__user-info">Daily word: {dailyWord}</p>
-            <p className="team-dashboard__user-info">
-              Current game day: {currentGameDay}
-            </p>
-          </div>
+          {teamId ? (
+            <div className="team-dashboard__user-info-container">
+              <p className="team-dashboard__user-info">User: {username}</p>
+              <p className="team-dashboard__user-info">
+                Daily word: {dailyWord}
+              </p>
+              <p className="team-dashboard__user-info">
+                Current game day: {currentGameDay}
+              </p>
+            </div>
+          ) : (
+            <div className="team-dashboard__user-info-container">
+              <p className="team-dashboard__user-info">Please create a team!</p>
+            </div>
+          )}
         </div>
         <form className="team-dashboard__entry-form" onSubmit={submitHandler}>
           <input

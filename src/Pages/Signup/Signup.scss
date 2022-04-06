@@ -71,8 +71,8 @@ body {
     @include button ($offwhite, $lightblue, $darkblue);
   }
 
-  &__login-container {
-    margin: 0.5rem 0;
+  &__login-link-container {
+    margin-top: 1.5rem;
   }
 
   &__login-link {

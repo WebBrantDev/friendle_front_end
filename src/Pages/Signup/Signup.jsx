@@ -1,8 +1,9 @@
 import "./Signup.scss";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Error from "../../Components/Error/Error";
+import logo from "../../assets/logos/friendle-main-logo.png";
 
 const Signup = () => {
   const [formUsername, setFormUsername] = useState("");
@@ -17,9 +18,29 @@ const Signup = () => {
 
   const apiURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
 
-  if (localStorage.getItem("token")) {
-    navigate("/TeamDashboard");
-  }
+  useEffect(() => {
+    let isMounted = true;
+    if (localStorage.getItem("token")) {
+      axios
+        .get(`${apiURL}/teamDashboard`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then(() => {
+          if (isMounted) {
+            navigate("/TeamDashboard");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  });
 
   const handleUsernameChange = (e) => {
     setFormUsername(e.target.value);
@@ -85,7 +106,21 @@ const Signup = () => {
               password,
               team_id,
             });
-            navigate("/Login");
+            if (signupRes) {
+              const loginRes = await axios
+                .post(`${apiURL}/login`, { username, password })
+                .then((res) => {
+                  const { token } = res.data;
+                  localStorage.setItem("token", token);
+                  navigate("/TeamDashboard");
+                  return res;
+                })
+                .catch((err) => {
+                  console.log(err);
+                  return err;
+                });
+              return loginRes;
+            }
 
             return signupRes;
           } else {
@@ -103,7 +138,7 @@ const Signup = () => {
   return (
     <section className="signup">
       <form className="signup__form" onSubmit={signupHandler}>
-        <h1 className="signup__heading">Friendle</h1>
+        <img className="signup__logo" src={logo} alt="Friendle logo" />
         <h2 className="signup__subheading">Sign Up</h2>
         <div className="signup__input-container">
           <label htmlFor="username" className="signup__label">
@@ -166,7 +201,7 @@ const Signup = () => {
         </div>
         <button className="signup__signup-button">Signup</button>
       </form>
-      <div className="signup__login-container">
+      <div className="signup__login-link-container">
         <Link className="signup__login-link" to="/Login">
           Already have an account?
         </Link>
