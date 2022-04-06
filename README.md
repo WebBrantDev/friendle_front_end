@@ -1,4 +1,4 @@
-# Friendle
+# [Friendle](https://friendle.one/)
 
 ### Inspired by the hit daily word game, Wordle, Friendle is a mobile-first platform for you and your friends to take on the daily challenge together. Friendle leaves picking a starting word each day to the robots and lets players test their mental strength against their friends.
 
@@ -16,7 +16,7 @@
 
 ---
 
-## Features that are next on the list
+## Upcoming features
 
 - Join multiple teams with a single account so you can play with even more friends
 - Different game modes (rotating, hard mode, etc)
@@ -27,14 +27,19 @@
 
 ## Tech Stack
 
-- React
-- SASS
-- Axios
-- JWT
-- NodeJS
-- Express
-- KNEX.JS
-- MySQL
+[React](https://reactjs.org/)  
+[SASS](https://sass-lang.com/)  
+[Axios](https://axios-http.com/docs/intro)  
+[JWT](https://jwt.io/)  
+[NodeJS](https://nodejs.org/en/)  
+[Express](https://expressjs.com/)  
+[KNEX.JS](http://knexjs.org/)  
+[MySQL](https://www.mysql.com/)
+
+### Deployed with:
+
+[Heroku](https://www.heroku.com/)  
+[Netlify](https://www.netlify.com/)
 
 ---
 
@@ -44,23 +49,15 @@
 **To start in development mode, run:**  
 `npm run dev`
 
-**To initiate database, run:**
+**To initiate database, run:**  
 `npm run migrate`
 
 ---
 
-## Resource Links
+## Inspiration
 
-[Wordle](https://www.nytimes.com/games/wordle/index.html)  
-[React](https://reactjs.org/)  
-[SASS](https://sass-lang.com/)  
-[Axios](https://axios-http.com/docs/intro)  
-[JWT](https://jwt.io/)  
-[NodeJS](https://nodejs.org/en/)
-[Express](https://expressjs.com/)
-[KNEX.JS](http://knexjs.org/)
-[MySQL](https://www.mysql.com/)
+[Wordle](https://www.nytimes.com/games/wordle/index.html)
 
 ---
 
-You can find the back end [here](https://github.com/WebBrantDev/friendle_back_end)
+You can find the front end [here](https://github.com/WebBrantDev/friendle_front_end)

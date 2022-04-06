@@ -23,7 +23,7 @@
   }
 
   &__heading {
-    @include heading;
+    @include subheading;
     margin-bottom: 0.5rem;
   }
 
@@ -54,5 +54,25 @@
 
   &__login-button {
     @include button ($offwhite, $lightblue, $darkblue);
+  }
+
+  &__login-link-container {
+    margin-top: 1.5rem;
+  }
+
+  &__login-link {
+    color: $lightblue;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 0.85rem;
+
+    &:hover {
+      color: $darkblue;
+      text-decoration: underline;
+    }
+
+    @include tablet-size {
+      font-size: 1rem;
+    }
   }
 }
