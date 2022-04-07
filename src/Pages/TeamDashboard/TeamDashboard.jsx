@@ -9,7 +9,7 @@ import Sidebar from "../../Components/Sidebar/Sidebar";
 import logoutIcon from "../../assets/icons/logout-icon.png";
 import inviteIcon from "../../assets/icons/invite-icon.png";
 import createIcon from "../../assets/icons/create-team-icon.png";
-import { epochConverter } from "../../helpers/epochConverter";
+// import { epochConverter } from "../../helpers/epochConverter";
 
 const TeamDashboard = () => {
   const [username, setUsername] = useState("");
@@ -399,9 +399,9 @@ const TeamDashboard = () => {
                     {formatFrontEnd(entry.guess_pattern).map((line) => {
                       return <div key={uuidv4()}>{line}</div>;
                     })}
-                    <p className="team-dashboard__timestamp">
+                    {/* <p className="team-dashboard__timestamp">
                       {epochConverter(entry.created_at)}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               );
