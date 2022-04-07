@@ -24,6 +24,7 @@ const TeamDashboard = () => {
 
   const apiURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
   const siteURL = process.env.REACT_APP_SITE_URL || "http://localhost:3000";
+  const serverURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
 
   let navigate = useNavigate();
 
@@ -34,40 +35,33 @@ const TeamDashboard = () => {
   const sortHandler = (e) => {
     e.preventDefault();
     const { value } = e.target;
-    axios
-      .post(
-        `${apiURL}/pullSortedData`,
-        { team_id: teamId, game_day: value },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+    if (value === "Day") {
+      return;
+    }
+    if (value !== currentGameDay) {
+      axios
+        .post(
+          `${apiURL}/pullTeamData`,
+          {
+            team_id: teamId,
+            user_id: userId,
+            current_game_day: value,
           },
-        }
-      )
-      .then((res) => {
-        const { data } = res;
-        axios
-          .post(
-            `${apiURL}/pullTeamData`,
-            {
-              team_id: teamId,
-              user_id: userId,
-              current_game_day: value,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          )
-          .then((res) => {
-            let sortedData = res.data.sort(
-              (a, b) => b.created_at - a.created_at
-            );
-            setTeamData(sortedData);
-            setCurrentGameDay(value);
-          });
-      });
+          }
+        )
+        .then((res) => {
+          let sortedData = res.data.sort((a, b) => b.created_at - a.created_at);
+          setTeamData(sortedData);
+          setCurrentGameDay(value);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const submitHandler = (e) => {
@@ -121,6 +115,18 @@ const TeamDashboard = () => {
               let sortedData = res.data.sort(
                 (a, b) => b.created_at - a.created_at
               );
+              axios
+                .get(`${serverURL}/teamDashboard`, {
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                })
+                .then((res) => {
+                  const { options } = res.data;
+                  if (options.length > 0) {
+                    setGameDays(options);
+                  }
+                });
               setTeamData(sortedData);
               toast("Entry added!", {
                 icon: "👍",
@@ -130,6 +136,9 @@ const TeamDashboard = () => {
                   color: "#423E3B",
                 },
               });
+            })
+            .catch((err) => {
+              console.log(err);
             });
         })
         .catch((err) => {
@@ -150,7 +159,6 @@ const TeamDashboard = () => {
   const inviteHandler = (e) => {
     e.preventDefault();
     const url = `${siteURL}/Signup/${teamId}`;
-    console.log(url);
     navigator.clipboard.writeText(url);
     toast("Copied to clipboard!", {
       icon: "👏",
@@ -177,8 +185,6 @@ const TeamDashboard = () => {
   };
 
   useEffect(() => {
-    const serverURL =
-      process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
     if (!loggedIn) {
       axios
         .get(`${serverURL}/teamDashboard`, {
@@ -194,12 +200,16 @@ const TeamDashboard = () => {
             team_name,
             daily_word,
             current_game_day,
+            options,
           } = res.data;
           if (team_name) {
             setTeamName(team_name);
             setTeamId(team_id);
             setCurrentGameDay(current_game_day);
             setDailyWord(daily_word);
+            if (options.length > 0) {
+              setGameDays(options);
+            }
           }
           setUsername(username);
           setUserId(id);
@@ -310,24 +320,41 @@ const TeamDashboard = () => {
             </div>
           )}
         </div>
-        <form className="team-dashboard__sort-form">
-          <label className="team-dashboard__sort-label" htmlFor="sort-entries">
-            Sort by game day:
-          </label>
-          <select
-            className="team-dashboard__sort-select"
-            name="sort-entries"
-            id="sort-entries"
-            onChange={sortHandler}
-          >
-            <option className="team-dashboard__option" value={21}>
-              21
-            </option>
-            <option className="team-dashboard__option" value={35}>
-              35
-            </option>
-          </select>
-        </form>
+        {teamId && gameDays ? (
+          <form className="team-dashboard__sort-form">
+            <label
+              className="team-dashboard__sort-label"
+              htmlFor="sort-entries"
+            >
+              Sort by game day:
+            </label>
+            <select
+              className="team-dashboard__sort-select"
+              name="sort-entries"
+              id="sort-entries"
+              onChange={sortHandler}
+            >
+              <option defaultValue="" className="team-dashboard__option">
+                Day
+              </option>
+              {teamId && gameDays
+                ? gameDays.map((day) => {
+                    return (
+                      <option
+                        key={uuidv4()}
+                        className="team-dashboard__option"
+                        value={day}
+                      >
+                        {day}
+                      </option>
+                    );
+                  })
+                : ""}
+            </select>
+          </form>
+        ) : (
+          ""
+        )}
         <form className="team-dashboard__entry-form" onSubmit={submitHandler}>
           <input
             className="team-dashboard__input"
