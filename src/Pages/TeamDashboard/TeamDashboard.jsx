@@ -9,6 +9,7 @@ import Sidebar from "../../Components/Sidebar/Sidebar";
 import logoutIcon from "../../assets/icons/logout-icon.png";
 import inviteIcon from "../../assets/icons/invite-icon.png";
 import createIcon from "../../assets/icons/create-team-icon.png";
+import { epochConverter } from "../../helpers/epochConverter";
 
 const TeamDashboard = () => {
   const [username, setUsername] = useState("");
@@ -19,15 +20,49 @@ const TeamDashboard = () => {
   const [teamName, setTeamName] = useState("");
   const [currentGameDay, setCurrentGameDay] = useState("");
   const [dailyWord, setDailyWord] = useState("");
+  const [gameDays, setGameDays] = useState("");
 
   const apiURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
   const siteURL = process.env.REACT_APP_SITE_URL || "http://localhost:3000";
+  const serverURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
 
   let navigate = useNavigate();
 
   if (!localStorage.getItem("token")) {
     navigate("/");
   }
+
+  const sortHandler = (e) => {
+    e.preventDefault();
+    const { value } = e.target;
+    if (value === "Day") {
+      return;
+    }
+    if (value !== currentGameDay) {
+      axios
+        .post(
+          `${apiURL}/pullTeamData`,
+          {
+            team_id: teamId,
+            user_id: userId,
+            current_game_day: value,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          let sortedData = res.data.sort((a, b) => b.created_at - a.created_at);
+          setTeamData(sortedData);
+          setCurrentGameDay(value);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -56,18 +91,42 @@ const TeamDashboard = () => {
         teamId
       );
       axios
-        .post(`${apiURL}/addEntry`, formattedData)
+        .post(`${apiURL}/addEntry`, formattedData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
         .then(() => {
           axios
-            .post(`${apiURL}/pullTeamData`, {
-              team_id: teamId,
-              user_id: userId,
-              current_game_day: currentGameDay,
-            })
+            .post(
+              `${apiURL}/pullTeamData`,
+              {
+                team_id: teamId,
+                user_id: userId,
+                current_game_day: currentGameDay,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            )
             .then((res) => {
               let sortedData = res.data.sort(
                 (a, b) => b.created_at - a.created_at
               );
+              axios
+                .get(`${serverURL}/teamDashboard`, {
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                })
+                .then((res) => {
+                  const { options } = res.data;
+                  if (options.length > 0) {
+                    setGameDays(options);
+                  }
+                });
               setTeamData(sortedData);
               toast("Entry added!", {
                 icon: "👍",
@@ -77,6 +136,9 @@ const TeamDashboard = () => {
                   color: "#423E3B",
                 },
               });
+            })
+            .catch((err) => {
+              console.log(err);
             });
         })
         .catch((err) => {
@@ -97,7 +159,6 @@ const TeamDashboard = () => {
   const inviteHandler = (e) => {
     e.preventDefault();
     const url = `${siteURL}/Signup/${teamId}`;
-    console.log(url);
     navigator.clipboard.writeText(url);
     toast("Copied to clipboard!", {
       icon: "👏",
@@ -124,10 +185,7 @@ const TeamDashboard = () => {
   };
 
   useEffect(() => {
-    const serverURL =
-      process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
     if (!loggedIn) {
-      console.log("running");
       axios
         .get(`${serverURL}/teamDashboard`, {
           headers: {
@@ -135,7 +193,6 @@ const TeamDashboard = () => {
           },
         })
         .then((res) => {
-          console.log("running");
           const {
             username,
             id,
@@ -143,12 +200,16 @@ const TeamDashboard = () => {
             team_name,
             daily_word,
             current_game_day,
+            options,
           } = res.data;
           if (team_name) {
             setTeamName(team_name);
             setTeamId(team_id);
             setCurrentGameDay(current_game_day);
             setDailyWord(daily_word);
+            if (options.length > 0) {
+              setGameDays(options);
+            }
           }
           setUsername(username);
           setUserId(id);
@@ -259,6 +320,41 @@ const TeamDashboard = () => {
             </div>
           )}
         </div>
+        {teamId && gameDays ? (
+          <form className="team-dashboard__sort-form">
+            <label
+              className="team-dashboard__sort-label"
+              htmlFor="sort-entries"
+            >
+              Sort by game day:
+            </label>
+            <select
+              className="team-dashboard__sort-select"
+              name="sort-entries"
+              id="sort-entries"
+              onChange={sortHandler}
+            >
+              <option defaultValue="" className="team-dashboard__option">
+                Day
+              </option>
+              {teamId && gameDays
+                ? gameDays.map((day) => {
+                    return (
+                      <option
+                        key={uuidv4()}
+                        className="team-dashboard__option"
+                        value={day}
+                      >
+                        {day}
+                      </option>
+                    );
+                  })
+                : ""}
+            </select>
+          </form>
+        ) : (
+          ""
+        )}
         <form className="team-dashboard__entry-form" onSubmit={submitHandler}>
           <input
             className="team-dashboard__input"
@@ -288,19 +384,24 @@ const TeamDashboard = () => {
                     }
                   >
                     <p className="team-dashboard__user-data">
-                      {entry.game_day}
-                    </p>
-                    <p className="team-dashboard__user-data">
-                      {entry.num_of_guesses}/6
-                    </p>
-                    <p className="team-dashboard__user-data">
                       {entry.username}
                     </p>
+                    <div className="team-dashboard__entry-data-container">
+                      <p className="team-dashboard__user-data">
+                        {entry.game_day}
+                      </p>
+                      <p className="team-dashboard__user-data">
+                        {entry.num_of_guesses}/6
+                      </p>
+                    </div>
                   </div>
                   <div className="team-dashboard__pattern-container">
                     {formatFrontEnd(entry.guess_pattern).map((line) => {
                       return <div key={uuidv4()}>{line}</div>;
                     })}
+                    <p className="team-dashboard__timestamp">
+                      {epochConverter(entry.created_at)}
+                    </p>
                   </div>
                 </div>
               );
