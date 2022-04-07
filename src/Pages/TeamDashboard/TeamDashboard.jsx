@@ -9,6 +9,7 @@ import Sidebar from "../../Components/Sidebar/Sidebar";
 import logoutIcon from "../../assets/icons/logout-icon.png";
 import inviteIcon from "../../assets/icons/invite-icon.png";
 import createIcon from "../../assets/icons/create-team-icon.png";
+import { epochConverter } from "../../helpers/epochConverter";
 
 const TeamDashboard = () => {
   const [username, setUsername] = useState("");
@@ -24,6 +25,8 @@ const TeamDashboard = () => {
   const siteURL = process.env.REACT_APP_SITE_URL || "http://localhost:3000";
 
   let navigate = useNavigate();
+
+  console.log(epochConverter(1649290901));
 
   if (!localStorage.getItem("token")) {
     navigate("/");
@@ -127,7 +130,6 @@ const TeamDashboard = () => {
     const serverURL =
       process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
     if (!loggedIn) {
-      console.log("running");
       axios
         .get(`${serverURL}/teamDashboard`, {
           headers: {
@@ -135,7 +137,6 @@ const TeamDashboard = () => {
           },
         })
         .then((res) => {
-          console.log("running");
           const {
             username,
             id,
@@ -271,6 +272,7 @@ const TeamDashboard = () => {
         {teamData ? (
           <div className="team-dashboard__entries-container">
             {teamData.map((entry) => {
+              console.log(entry);
               return (
                 <div
                   key={uuidv4()}
@@ -288,19 +290,24 @@ const TeamDashboard = () => {
                     }
                   >
                     <p className="team-dashboard__user-data">
-                      {entry.game_day}
-                    </p>
-                    <p className="team-dashboard__user-data">
-                      {entry.num_of_guesses}/6
-                    </p>
-                    <p className="team-dashboard__user-data">
                       {entry.username}
                     </p>
+                    <div className="team-dashboard__entry-data-container">
+                      <p className="team-dashboard__user-data">
+                        {entry.game_day}
+                      </p>
+                      <p className="team-dashboard__user-data">
+                        {entry.num_of_guesses}/6
+                      </p>
+                    </div>
                   </div>
                   <div className="team-dashboard__pattern-container">
                     {formatFrontEnd(entry.guess_pattern).map((line) => {
                       return <div key={uuidv4()}>{line}</div>;
                     })}
+                    <p className="team-dashboard__timestamp">
+                      {epochConverter(entry.created_at)}
+                    </p>
                   </div>
                 </div>
               );

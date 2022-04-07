@@ -165,25 +165,37 @@
 
     @include tablet-size {
       font-size: 1rem;
-      width: 50%;
+      width: 45%;
     }
   }
 
   &__user-data-container {
     padding: 1.5rem 2rem;
+    @include flex-column;
+    align-items: center;
     background-color: $lightblue;
     border-radius: 24px 24px 0 0;
-    color: $darkblack;
+    color: $offwhite;
     display: flex;
     justify-content: space-between;
 
     &--right {
       background-color: $lightorange;
+      font-weight: $bold;
+      color: $darkblack;
     }
 
     @include tablet-size {
       font-size: 1rem;
     }
+  }
+
+  &__entry-data-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    padding: 0 1rem;
   }
 
   &__pattern-container {
@@ -194,6 +206,17 @@
 
     @include tablet-size {
       font-size: 1.5rem;
+    }
+  }
+
+  &__timestamp {
+    font-size: 0.85rem;
+    color: $offwhite;
+    margin-top: 1rem;
+    align-self: flex-start;
+
+    @include tablet-size {
+      font-size: 1rem;
     }
   }
 }
