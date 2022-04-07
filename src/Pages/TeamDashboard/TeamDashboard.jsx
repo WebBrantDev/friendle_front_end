@@ -20,17 +20,55 @@ const TeamDashboard = () => {
   const [teamName, setTeamName] = useState("");
   const [currentGameDay, setCurrentGameDay] = useState("");
   const [dailyWord, setDailyWord] = useState("");
+  const [gameDays, setGameDays] = useState("");
 
   const apiURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
   const siteURL = process.env.REACT_APP_SITE_URL || "http://localhost:3000";
 
   let navigate = useNavigate();
 
-  console.log(epochConverter(1649290901));
-
   if (!localStorage.getItem("token")) {
     navigate("/");
   }
+
+  const sortHandler = (e) => {
+    e.preventDefault();
+    const { value } = e.target;
+    axios
+      .post(
+        `${apiURL}/pullSortedData`,
+        { team_id: teamId, game_day: value },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        const { data } = res;
+        axios
+          .post(
+            `${apiURL}/pullTeamData`,
+            {
+              team_id: teamId,
+              user_id: userId,
+              current_game_day: value,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          )
+          .then((res) => {
+            let sortedData = res.data.sort(
+              (a, b) => b.created_at - a.created_at
+            );
+            setTeamData(sortedData);
+            setCurrentGameDay(value);
+          });
+      });
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -59,14 +97,26 @@ const TeamDashboard = () => {
         teamId
       );
       axios
-        .post(`${apiURL}/addEntry`, formattedData)
+        .post(`${apiURL}/addEntry`, formattedData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
         .then(() => {
           axios
-            .post(`${apiURL}/pullTeamData`, {
-              team_id: teamId,
-              user_id: userId,
-              current_game_day: currentGameDay,
-            })
+            .post(
+              `${apiURL}/pullTeamData`,
+              {
+                team_id: teamId,
+                user_id: userId,
+                current_game_day: currentGameDay,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            )
             .then((res) => {
               let sortedData = res.data.sort(
                 (a, b) => b.created_at - a.created_at
@@ -260,6 +310,24 @@ const TeamDashboard = () => {
             </div>
           )}
         </div>
+        <form className="team-dashboard__sort-form">
+          <label className="team-dashboard__sort-label" htmlFor="sort-entries">
+            Sort by game day:
+          </label>
+          <select
+            className="team-dashboard__sort-select"
+            name="sort-entries"
+            id="sort-entries"
+            onChange={sortHandler}
+          >
+            <option className="team-dashboard__option" value={21}>
+              21
+            </option>
+            <option className="team-dashboard__option" value={35}>
+              35
+            </option>
+          </select>
+        </form>
         <form className="team-dashboard__entry-form" onSubmit={submitHandler}>
           <input
             className="team-dashboard__input"
@@ -272,7 +340,6 @@ const TeamDashboard = () => {
         {teamData ? (
           <div className="team-dashboard__entries-container">
             {teamData.map((entry) => {
-              console.log(entry);
               return (
                 <div
                   key={uuidv4()}
