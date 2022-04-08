@@ -60,4 +60,4 @@
 
 ---
 
-You can find the front end [here](https://github.com/WebBrantDev/friendle_front_end)
+You can find the back end [here](https://github.com/WebBrantDev/friendle_back_end)
