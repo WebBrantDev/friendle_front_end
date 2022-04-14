@@ -27,6 +27,8 @@
 
 ## Tech Stack
 
+![My Skills](https://skillicons.dev/icons?i=react,sass,nodejs,express,mysql&theme=light)
+
 [React](https://reactjs.org/)  
 [SASS](https://sass-lang.com/)  
 [Axios](https://axios-http.com/docs/intro)  
@@ -37,6 +39,8 @@
 [MySQL](https://www.mysql.com/)
 
 ### Deployed with:
+
+![My Skills](https://skillicons.dev/icons?i=heroku,netlify&theme=light)
 
 [Heroku](https://www.heroku.com/)  
 [Netlify](https://www.netlify.com/)
