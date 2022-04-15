@@ -10,6 +10,7 @@ const Login = () => {
   const apiURL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
 
   let [loggedIn, setLoggedIn] = useState(false);
+  const [dailyWord, setDailyWord] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -25,6 +26,15 @@ const Login = () => {
             setLoggedIn(true);
             navigate("/TeamDashboard");
           }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .get(`${apiURL}/getDailyWord`)
+        .then((res) => {
+          setDailyWord(res.data.dailyWord);
         })
         .catch((err) => {
           console.log(err);
@@ -96,6 +106,11 @@ const Login = () => {
           <Link className="login__login-link" to="/">
             Need an account?
           </Link>
+          {dailyWord ? (
+            <p className="login__daily-word">Global starter: {dailyWord}</p>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     );

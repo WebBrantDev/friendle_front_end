@@ -12,6 +12,7 @@ const Signup = () => {
   const [usernameAvailable, setUsernameAvailable] = useState(true);
   const [emailValid, setEmailValid] = useState(true);
   const [passwordValid, setPasswordValid] = useState(true);
+  const [dailyWord, setDailyWord] = useState("");
 
   let navigate = useNavigate();
   let params = useParams();
@@ -31,6 +32,15 @@ const Signup = () => {
           if (isMounted) {
             navigate("/TeamDashboard");
           }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .get(`${apiURL}/getDailyWord`)
+        .then((res) => {
+          setDailyWord(res.data.dailyWord);
         })
         .catch((err) => {
           console.log(err);
@@ -205,6 +215,11 @@ const Signup = () => {
         <Link className="signup__login-link" to="/Login">
           Already have an account?
         </Link>
+        {dailyWord ? (
+          <p className="signup__daily-word">Global starter: {dailyWord}</p>
+        ) : (
+          ""
+        )}
       </div>
     </section>
   );

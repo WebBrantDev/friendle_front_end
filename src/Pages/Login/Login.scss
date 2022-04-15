@@ -57,7 +57,27 @@
   }
 
   &__login-link-container {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    
+    @include tablet-size {
+      flex-direction: row;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+    }
+  }
+
+  &__daily-word {
+    color: $offwhite;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+
+    @include tablet-size {
+      font-size: 1rem;
+      margin: 0;
+    }
   }
 
   &__login-link {
